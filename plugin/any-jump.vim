@@ -1,16 +1,16 @@
+" TODO_RELEASE:
+" - sync file types comments
+" - sync file types
+" - add custom lang with hot patches (no el files required) - for viml
+" - remove emacs regexp for compaction
+
 " TODO:
 " - wrap for nvim should be configurable
-" - fix bg in NeoSolorized theme (add bg set color support)
 " - [more] button should append N items only on current collection
 " - add scope :symbol to ruby syntax
-" - add lightline integration ?
 " - add mouse-click evets support
 " - any-jump-last should also restore cursor position
-" - add multiple priview mode
-" - ability to toggle help
-" - ability to make help hidden by default
 " - add definitions rules for rails meta expressions in ruby like `has_many :users`
-" - better default syntax (which works for some N popular themes) rules
 " - hl keyword in result line also
 " - ability to jumps and lookups for library source codes paths
 " - [hot] display type of definition
@@ -19,13 +19,6 @@
 " - AnyJumpFirst - if found result from prefered dirs of only one result
 "   then jump to it, othrewise open ui
 " - [option] auto preview first result
-" - is tags cupport really needed?
-"   i think it cool for perfomance reasons, but sometimes our engine is deeper
-"
-" TAGS_SUPPORT:
-" - use tags definitions engine if prefered
-" - what kind of additional data we can provide if tags enabled? (besides
-"   definitions)A
 "
 " UI:
 " - add rerun search button (first step to refuctoring) (first `R` - rerun
@@ -45,9 +38,11 @@
 "
 " TODO_FUTURE_RELEASES:
 " - [nvim] >> Once a focus to the floating window is lost, the window should disappear. Like many other plugins with floating window.
+"   add auto-hide option?
+"
 " - AnyJumpPreview
 " - "save jump" button ??
-" - jumps list ??
+" - jumps list ?? (AnyJumps)
 
 " === Vim version check
 let s:nvim = has('nvim')
@@ -722,8 +717,8 @@ fu! g:AnyJumpHandlePreview() abort
       let preview_end_ln        = file_ln + preview_after_offset
 
       let path = join([getcwd(), action_item.data.path], '/')
-      let cmd  = 'head -n ' . string(preview_end_ln) . ' ' . path
-            \ . ' | tail -n ' . string(preview_after_offset + 1 + preview_before_offset)
+      let cmd  = 'head -n ' . string(preview_end_ln) . ' "' . path
+            \ . '" | tail -n ' . string(preview_after_offset + 1 + preview_before_offset)
 
       let preview = split(system(cmd), "\n")
       let render_ln = ui.GetItemLineNumber(action_item)
@@ -840,22 +835,22 @@ command! AnyJumpRunSpecs call s:RunSpecs()
 if s:nvim
   augroup anyjump
     au!
-    au FileType any-jump nnoremap <buffer> o :call g:AnyJumpHandleOpen()<cr>
-    au FileType any-jump nnoremap <buffer><CR> :call g:AnyJumpHandleOpen()<cr>
-    au FileType any-jump nnoremap <buffer> t :call g:AnyJumpHandleOpen('tab')<cr>
-    au FileType any-jump nnoremap <buffer> s :call g:AnyJumpHandleOpen('split')<cr>
-    au FileType any-jump nnoremap <buffer> v :call g:AnyJumpHandleOpen('vsplit')<cr>
+    au FileType any-jump nnoremap <buffer> <silent> o :call g:AnyJumpHandleOpen()<cr>
+    au FileType any-jump nnoremap <buffer> <silent> <CR> :call g:AnyJumpHandleOpen()<cr>
+    au FileType any-jump nnoremap <buffer> <silent> t :call g:AnyJumpHandleOpen('tab')<cr>
+    au FileType any-jump nnoremap <buffer> <silent> s :call g:AnyJumpHandleOpen('split')<cr>
+    au FileType any-jump nnoremap <buffer> <silent> v :call g:AnyJumpHandleOpen('vsplit')<cr>
 
-    au FileType any-jump nnoremap <buffer> p :call g:AnyJumpHandlePreview()<cr>
-    au FileType any-jump nnoremap <buffer> <tab> :call g:AnyJumpHandlePreview()<cr>
-    au FileType any-jump nnoremap <buffer> q :call g:AnyJumpHandleClose()<cr>
-    au FileType any-jump nnoremap <buffer> <esc> :call g:AnyJumpHandleClose()<cr>
-    au FileType any-jump nnoremap <buffer> r :call g:AnyJumpHandleReferences()<cr>
-    au FileType any-jump nnoremap <buffer> b :call g:AnyJumpToFirstLink()<cr>
-    au FileType any-jump nnoremap <buffer> T :call g:AnyJumpToggleGrouping()<cr>
-    au FileType any-jump nnoremap <buffer> A :call g:AnyJumpToggleAllResults()<cr>
-    au FileType any-jump nnoremap <buffer> a :call g:AnyJumpLoadNextBatchResults()<cr>
-    au FileType any-jump nnoremap <buffer> L :call g:AnyJumpToggleListStyle()<cr>
+    au FileType any-jump nnoremap <buffer> <silent> p :call g:AnyJumpHandlePreview()<cr>
+    au FileType any-jump nnoremap <buffer> <silent> <tab> :call g:AnyJumpHandlePreview()<cr>
+    au FileType any-jump nnoremap <buffer> <silent> q :call g:AnyJumpHandleClose()<cr>
+    au FileType any-jump nnoremap <buffer> <silent> <esc> :call g:AnyJumpHandleClose()<cr>
+    au FileType any-jump nnoremap <buffer> <silent> r :call g:AnyJumpHandleReferences()<cr>
+    au FileType any-jump nnoremap <buffer> <silent> b :call g:AnyJumpToFirstLink()<cr>
+    au FileType any-jump nnoremap <buffer> <silent> T :call g:AnyJumpToggleGrouping()<cr>
+    au FileType any-jump nnoremap <buffer> <silent> A :call g:AnyJumpToggleAllResults()<cr>
+    au FileType any-jump nnoremap <buffer> <silent> a :call g:AnyJumpLoadNextBatchResults()<cr>
+    au FileType any-jump nnoremap <buffer> <silent> L :call g:AnyJumpToggleListStyle()<cr>
   augroup END
 end
 
